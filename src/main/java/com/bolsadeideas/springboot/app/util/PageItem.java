@@ -1,4 +1,4 @@
-package com.bolsadeideas.springboot.app.util.paginator;
+package com.bolsadeideas.springboot.app.util;
 
 public class PageItem {
 

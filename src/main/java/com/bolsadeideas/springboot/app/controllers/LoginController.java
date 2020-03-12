@@ -13,10 +13,11 @@ public class LoginController {
 
     @GetMapping("/login")
     public String Login(@RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "logout", required = false) String logout, Model model, Principal principal, RedirectAttributes flash) {
+                        @RequestParam(value = "logout", required = false) String logout,
+                        Model model, Principal principal, RedirectAttributes flash) {
 
         if (error != null) {
-            model.addAttribute("danger", "Error en el login: Nombre de usuario o contraseña incoreccta, por favor vuelta a intentarlo!");
+            model.addAttribute("danger", "Nombre de usuario o contraseña incorecta, por favor vuelva a intentarlo!");
         }
 
         if (logout != null) {

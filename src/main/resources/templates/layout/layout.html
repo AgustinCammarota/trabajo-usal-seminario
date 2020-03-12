@@ -27,7 +27,7 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li sec:authorize="!isAuthenticated()">
-                            <a class="btn btn-outline-primary" th:href="@{/login}">Sing In</a>
+                                <a class="btn btn-outline-primary" th:href="@{/login}">Sing In</a>
                         </li>
                         <!--                    -->
                         <li sec:authorize="isAuthenticated()" class="dropdown">

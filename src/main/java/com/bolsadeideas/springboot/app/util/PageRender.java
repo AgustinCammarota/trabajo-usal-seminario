@@ -1,4 +1,4 @@
-package com.bolsadeideas.springboot.app.util.paginator;
+package com.bolsadeideas.springboot.app.util;
 
 import org.springframework.data.domain.Page;
 

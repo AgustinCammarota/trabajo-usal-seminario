@@ -1,17 +1,26 @@
 package com.bolsadeideas.springboot.app;
 
+import com.bolsadeideas.springboot.app.models.service.JpaUserDetailsService;
+import com.bolsadeideas.springboot.app.util.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    private JpaUserDetailsService userDetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -20,18 +29,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
-        PasswordEncoder encoder = passwordEncoder();
-        User.UserBuilder userBuilder = User.builder().passwordEncoder(encoder::encode);
-        builder.inMemoryAuthentication().withUser(userBuilder.username("admin").password("1234").roles("ADMIN", "USER"))
-                .withUser(userBuilder.username("agustin").password("1111").roles("USER"));
+        PasswordEncoder passwordEncoder = passwordEncoder();
+        builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/listar").permitAll().
-                antMatchers("/ver/**", "/uploads/**").hasAnyRole("USER").
-                antMatchers("/form/**", "/eliminar/**", "/factura/**").hasAnyRole("ADMIN").anyRequest().authenticated().
-                and().formLogin().loginPage("/login").permitAll().and().logout().permitAll();
-
+                anyRequest().authenticated().and().formLogin().successHandler(loginSuccessHandler).loginPage("/login").
+                permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/error_403");
     }
 }
