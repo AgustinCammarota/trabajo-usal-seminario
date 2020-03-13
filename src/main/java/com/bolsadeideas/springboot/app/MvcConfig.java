@@ -28,5 +28,23 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/error_403").setViewName("error_403");
     }
 
+    //Para implementar multilenguaje
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+        localeResolver.setDefaultLocale(new Locale("es", "ES"));
+        return localeResolver;
+    }
 
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        return localeChangeInterceptor;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
+    }
 }

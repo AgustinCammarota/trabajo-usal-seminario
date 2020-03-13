@@ -5,6 +5,7 @@ import com.bolsadeideas.springboot.app.models.service.IClienteService;
 import com.bolsadeideas.springboot.app.models.service.IUploadFileService;
 import com.bolsadeideas.springboot.app.util.PageRender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Locale;
 
 @Controller
 @SessionAttributes("cliente")
@@ -26,17 +28,21 @@ public class ClienteController {
 
     @Autowired
     private IClienteService clienteService;
+
     @Autowired
     private IUploadFileService uploadFileService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @RequestMapping(value = {"/listar", "/"}, method = RequestMethod.GET)
-    public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+    public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Locale locale) {
         Pageable pageRequest = PageRequest.of(page, 4);
         Page<Cliente> clientes = clienteService.findAll(pageRequest);
 
         PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 
-        model.addAttribute("titulo", "Listado de Clientes");
+        model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo", null, locale));
         model.addAttribute("clientes", clientes);
         model.addAttribute("page", pageRender);
         return "listar";

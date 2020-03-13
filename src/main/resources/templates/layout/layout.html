@@ -27,7 +27,7 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li sec:authorize="!isAuthenticated()">
-                                <a class="btn btn-outline-primary" th:href="@{/login}">Sing In</a>
+                            <a class="btn btn-outline-primary" th:href="@{/login}">Sing In</a>
                         </li>
                         <!--                    -->
                         <li sec:authorize="isAuthenticated()" class="dropdown">
@@ -42,6 +42,14 @@
                                     </button>
                                 </form>
                             </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto mx-4">
+                        <li class="nav-item mx-1">
+                            <a class="btn btn-outline-success" th:href="@{/locale(lang=es_ES)}">ES</a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a class="btn btn-outline-success" th:href="@{/locale(lang=en_US)}">EN</a>
                         </li>
                     </ul>
                 </div>
