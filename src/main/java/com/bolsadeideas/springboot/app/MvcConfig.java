@@ -2,6 +2,7 @@ package com.bolsadeideas.springboot.app;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -24,6 +25,7 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     //Se encarga de cargar una vista sin la necesidad de un controlador.
+    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/error_403").setViewName("error_403");
     }
@@ -46,5 +48,14 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
+    }
+
+    //Configurar convert XML (conversor)
+    @Bean
+    public Jaxb2Marshaller jaxb2Marshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        //dentro ira la clase que se convertira a xml
+        marshaller.setClassesToBeBound(new Class[]{com.bolsadeideas.springboot.app.util.viewsexport.WrapperClienteXml.class});
+        return marshaller;
     }
 }

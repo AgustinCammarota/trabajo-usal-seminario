@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -34,6 +35,12 @@ public class ClienteController {
 
     @Autowired
     private MessageSource messageSource;
+
+    @RequestMapping(value = "/listar-rest", method = RequestMethod.GET)
+    public @ResponseBody
+    List<Cliente> listarRest() {
+        return clienteService.findAll();
+    }
 
     @RequestMapping(value = {"/listar", "/"}, method = RequestMethod.GET)
     public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Locale locale) {
